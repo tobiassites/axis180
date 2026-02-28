@@ -63,20 +63,30 @@ a:hover { text-decoration: underline; }
   line-height: 1.5;
 }
 
-.delete-link {
-  font-size: 11px;
-  color: #999;
-  margin-left: 10px;
-}
-
-#post-detail h1 {
-  margin: 0 0 6px 0;
-  font-size: 20px;
-}
-
 .body p {
   margin: 0 0 14px 0;
   line-height: 1.6;
+}
+
+/* comments */
+
+.comment-box {
+  margin-top: 30px;
+  border-top: 1px solid #ccc;
+  padding-top: 14px;
+}
+
+.comment-box textarea {
+  width: 100%;
+  height: 80px;
+  font-family: inherit;
+}
+
+.comment {
+  font-size: 13px;
+  margin: 8px 0;
+  border-bottom: 1px dotted #ddd;
+  padding-bottom: 6px;
 }
 
 #footer {
@@ -116,26 +126,30 @@ a:hover { text-decoration: underline; }
     <div class="post-meta" id="d-meta"></div>
     <hr>
     <div class="body" id="d-body"></div>
+
+    <div class="comment-box">
+      <h3>comments</h3>
+      <div id="comments-post"></div>
+      <textarea id="comment-input-post" placeholder="write a comment..."></textarea><br>
+      <button onclick="addComment('post')">post comment</button>
+    </div>
   </div>
 </div>
 
 <!-- STOCK RESEARCH -->
 <div id="view-stocks" class="view">
-  <h2>Stock Research</h2>
+  <h2>stock research</h2>
 
   <div class="post-entry">
     <h2><a href="#" onclick="openStock('a');return false;">Stock A</a></h2>
-    <p class="post-excerpt">Research notes for Stock A.</p>
   </div>
 
   <div class="post-entry">
     <h2><a href="#" onclick="openStock('b');return false;">Stock B</a></h2>
-    <p class="post-excerpt">Research notes for Stock B.</p>
   </div>
 
   <div class="post-entry">
     <h2><a href="#" onclick="openStock('c');return false;">Stock C</a></h2>
-    <p class="post-excerpt">Research notes for Stock C.</p>
   </div>
 </div>
 
@@ -145,8 +159,13 @@ a:hover { text-decoration: underline; }
   <div id="stock-detail">
     <h1 id="s-title"></h1>
     <hr>
-    <div class="body" id="s-body" contenteditable="true">
-      <p>Write your research here...</p>
+    <div class="body" id="s-body"></div>
+
+    <div class="comment-box">
+      <h3>comments</h3>
+      <div id="comments-stock"></div>
+      <textarea id="comment-input-stock" placeholder="write a comment..."></textarea><br>
+      <button onclick="addComment('stock')">post comment</button>
     </div>
   </div>
 </div>
@@ -154,7 +173,7 @@ a:hover { text-decoration: underline; }
 <!-- ABOUT -->
 <div id="view-about" class="view">
   <p>none of the information you will read is financial advice, nor advice of any kind</p>
-  <p>read at your own pleasure, would love the discussion in the comments of each post</p>
+  <p>read at your own pleasure</p>
 </div>
 
 <div id="footer">
@@ -165,6 +184,8 @@ a:hover { text-decoration: underline; }
 
 <script>
 let posts = [];
+
+/* ===== POSTS ===== */
 
 function loadPosts() {
   const saved = localStorage.getItem('axis180-posts');
@@ -184,7 +205,6 @@ function renderPosts() {
     <div class="post-entry">
       <h2>
         <a href="#" onclick="openPost(${i});return false;">${escapeHTML(p.title)}</a>
-        <a href="#" class="delete-link" onclick="deletePost(${i});return false;">[delete]</a>
       </h2>
       <div class="post-meta">${p.date} — ${p.category} — ${p.readtime} min read</div>
       <p class="post-excerpt">${escapeHTML(p.excerpt)}</p>
@@ -192,28 +212,81 @@ function renderPosts() {
   `).join('');
 }
 
+let currentPostId = null;
+let currentStockId = null;
+
 function openPost(i){
   const p = posts[i];
+  currentPostId = i;
 
   document.getElementById('d-title').textContent = p.title;
   document.getElementById('d-meta').textContent =
     p.date + " — " + p.category + " — " + p.readtime + " min read";
 
   document.getElementById('d-body').innerHTML =
-    p.content.split('\n\n')
-      .map(t=>"<p>"+escapeHTML(t)+"</p>")
-      .join('');
+    p.content.split('\n\n').map(t=>"<p>"+escapeHTML(t)+"</p>").join('');
 
+  loadComments('post');
   showView('post');
 }
 
-function deletePost(i){
-  if(confirm("Delete this post?")){
-    posts.splice(i,1);
-    localStorage.setItem('axis180-posts', JSON.stringify(posts));
-    renderPosts();
-  }
+/* ===== STOCKS (write in code only) ===== */
+
+const stockContent = {
+  a: "<p>Your Stock A research goes here.</p>",
+  b: "<p>Your Stock B research goes here.</p>",
+  c: "<p>Your Stock C research goes here.</p>"
+};
+
+function openStock(letter){
+  currentStockId = letter;
+
+  document.getElementById('s-title').textContent =
+    "Stock " + letter.toUpperCase();
+
+  document.getElementById('s-body').innerHTML =
+    stockContent[letter];
+
+  loadComments('stock');
+  showView('stock-detail');
 }
+
+/* ===== COMMENTS ===== */
+
+function getCommentKey(type){
+  if(type === 'post') return 'axis180-comments-post-' + currentPostId;
+  if(type === 'stock') return 'axis180-comments-stock-' + currentStockId;
+}
+
+function loadComments(type){
+  const key = getCommentKey(type);
+  const data = JSON.parse(localStorage.getItem(key) || "[]");
+
+  const box = document.getElementById(
+    type === 'post' ? 'comments-post' : 'comments-stock'
+  );
+
+  box.innerHTML = data.map(c => `<div class="comment">${escapeHTML(c)}</div>`).join('');
+}
+
+function addComment(type){
+  const input = document.getElementById(
+    type === 'post' ? 'comment-input-post' : 'comment-input-stock'
+  );
+
+  if(!input.value.trim()) return;
+
+  const key = getCommentKey(type);
+  const data = JSON.parse(localStorage.getItem(key) || "[]");
+
+  data.push(input.value.trim());
+  localStorage.setItem(key, JSON.stringify(data));
+
+  input.value = "";
+  loadComments(type);
+}
+
+/* ===== UTIL ===== */
 
 function showView(name){
   document.querySelectorAll('.view')
@@ -226,28 +299,6 @@ function showView(name){
 function escapeHTML(str){
   return str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
-
-/* ===== STOCK RESEARCH ===== */
-
-function openStock(letter){
-  document.getElementById('s-title').textContent =
-    "Stock " + letter.toUpperCase();
-
-  const saved = localStorage.getItem('axis180-stock-'+letter);
-  document.getElementById('s-body').innerHTML =
-    saved || "<p>Write your research here...</p>";
-
-  showView('stock-detail');
-}
-
-// autosave stock notes
-document.addEventListener("input", function(e){
-  if(e.target.id === "s-body"){
-    const title = document.getElementById('s-title').textContent;
-    const letter = title.split(" ")[1].toLowerCase();
-    localStorage.setItem('axis180-stock-'+letter, e.target.innerHTML);
-  }
-});
 
 window.onload = loadPosts;
 </script>
