@@ -1,302 +1,344 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>axis180</title>
+
 <style>
-  body {
-    font-family: Times New Roman, Times, serif;
-    font-size: 16px;
-    color: #000000;
-    background: #ffffff;
-    margin: 0;
-    padding: 0;
-  }
+body {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  color: #000;
+  background: #fff;
+  margin: 0;
+}
 
-  a { color: #0000cc; }
-  a:visited { color: #551a8b; }
-  a:hover { color: #cc0000; }
+#wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 12px;
+}
 
-  #wrap {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px 10px;
-  }
+a { color: #0000cc; text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-  #header {
-    border-bottom: 1px solid #000000;
-    padding-bottom: 8px;
-    margin-bottom: 16px;
-  }
+#header {
+  border-bottom: 1px solid #000;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
 
-  #header h1 { font-size: 22px; margin: 0 0 2px 0; font-weight: bold; }
-  #header p { margin: 0; font-size: 13px; color: #333333; }
+#header h1 { margin: 0; font-size: 22px; }
+#header p { margin: 2px 0 0 0; font-size: 13px; color: #555; }
 
-  #nav {
-    font-size: 13px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid #cccccc;
-    padding-bottom: 6px;
-  }
+#nav {
+  font-size: 13px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 6px;
+}
 
-  #nav a { margin-right: 12px; text-decoration: none; }
-  #nav a:hover { text-decoration: underline; }
+#nav a { margin-right: 14px; }
 
-  .view { display: none; }
-  .view.active { display: block; }
+.view { display: none; }
+.view.active { display: block; }
 
-  .post-entry {
-    margin-bottom: 22px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #eeeeee;
-  }
+.post-entry {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #eee;
+}
 
-  .post-entry h2 { font-size: 17px; margin: 0 0 3px 0; font-weight: bold; }
-  .post-entry h2 a { text-decoration: none; }
-  .post-entry h2 a:hover { text-decoration: underline; }
+.post-entry h2 { margin: 0 0 4px 0; font-size: 17px; }
 
-  .post-meta { font-size: 12px; color: #666666; margin-bottom: 6px; }
-  .post-excerpt { font-size: 15px; line-height: 1.5; margin: 0 0 5px 0; }
-  .read-more { font-size: 13px; }
+.post-meta {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+}
 
-  #write-form { max-width: 600px; }
-  #write-form h2 { font-size: 18px; margin: 0 0 12px 0; border-bottom: 1px solid #000; padding-bottom: 4px; }
+.post-excerpt {
+  font-size: 15px;
+  line-height: 1.5;
+}
 
-  .field { margin-bottom: 12px; }
-  .field label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 3px; }
+.delete-link {
+  font-size: 11px;
+  color: #999;
+  margin-left: 10px;
+}
 
-  .field input[type="text"],
-  .field input[type="number"],
-  .field select,
-  .field textarea {
-    width: 100%;
-    font-family: Times New Roman, Times, serif;
-    font-size: 15px;
-    border: 1px solid #999999;
-    padding: 4px 5px;
-    box-sizing: border-box;
-    background: #ffffff;
-    color: #000000;
-  }
+.field { margin-bottom: 12px; }
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
 
-  .field textarea { min-height: 280px; line-height: 1.5; resize: vertical; }
-  .field-row { display: flex; gap: 16px; }
-  .field-row .field { flex: 1; }
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  border: 1px solid #999;
+  padding: 5px;
+  box-sizing: border-box;
+}
 
-  input[type="submit"], button.plain-btn {
-    font-family: Times New Roman, Times, serif;
-    font-size: 14px;
-    background: #ffffff;
-    border: 1px solid #000000;
-    padding: 4px 14px;
-    cursor: pointer;
-    color: #000000;
-  }
+textarea {
+  min-height: 260px;
+  line-height: 1.5;
+  resize: vertical;
+}
 
-  input[type="submit"]:hover, button.plain-btn:hover { background: #000000; color: #ffffff; }
+input[type="submit"] {
+  font-family: inherit;
+  font-size: 14px;
+  border: 1px solid #000;
+  background: #fff;
+  padding: 5px 14px;
+  cursor: pointer;
+}
 
-  #publish-bar { display: flex; align-items: center; gap: 16px; margin-top: 8px; }
-  #word-count { font-size: 12px; color: #666666; }
+input[type="submit"]:hover {
+  background: #000;
+  color: #fff;
+}
 
-  #toast { display: none; font-size: 13px; color: #006600; margin-bottom: 10px; }
-  #loading { font-size: 13px; color: #666666; margin-bottom: 10px; }
+#publish-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
 
-  #post-detail h1 { font-size: 20px; margin: 0 0 4px 0; }
-  #post-detail .post-meta { margin-bottom: 12px; }
-  #post-detail hr { border: none; border-top: 1px solid #cccccc; margin: 16px 0; }
-  #post-detail .body { font-size: 16px; line-height: 1.6; }
-  #post-detail .body p { margin: 0 0 14px 0; }
-  #back-link { font-size: 13px; margin-bottom: 14px; display: block; }
+#word-count {
+  font-size: 12px;
+  color: #666;
+}
 
-  #about h2 { font-size: 18px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px; }
-  #about p { font-size: 15px; line-height: 1.6; margin: 0 0 12px 0; }
-  #about ul { font-size: 15px; line-height: 1.7; margin: 0 0 12px 20px; padding: 0; }
+#toast {
+  display: none;
+  font-size: 13px;
+  color: #006600;
+  margin-bottom: 8px;
+}
 
-  #footer { margin-top: 30px; padding-top: 8px; border-top: 1px solid #000000; font-size: 12px; color: #666666; }
+#post-detail h1 {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+}
 
-  .delete-link { font-size: 11px; color: #999999; margin-left: 10px; text-decoration: none; }
-  .delete-link:hover { color: #cc0000; text-decoration: underline; }
+#post-detail .body p {
+  margin: 0 0 14px 0;
+  line-height: 1.6;
+}
+
+#footer {
+  margin-top: 40px;
+  padding-top: 8px;
+  border-top: 1px solid #000;
+  font-size: 12px;
+  color: #666;
+}
 </style>
 </head>
 <body>
+
 <div id="wrap">
 
-  <div id="header">
-    <h1>axis180</h1>
-    <p>Thoughts on business and finance.</p>
+<div id="header">
+  <h1>axis180</h1>
+  <p>Thoughts on business and finance.</p>
+</div>
+
+<div id="nav">
+  <a href="#" onclick="showView('home');return false;">Home</a>
+  <a href="#" onclick="showView('write');return false;">Write</a>
+  <a href="#" onclick="showView('about');return false;">About</a>
+</div>
+
+<!-- HOME -->
+<div id="view-home" class="view active">
+  <div id="posts-list"></div>
+</div>
+
+<!-- WRITE -->
+<div id="view-write" class="view">
+  <div id="toast">Post published.</div>
+
+  <div class="field">
+    <label>Title</label>
+    <input type="text" id="f-title">
   </div>
 
-  <div id="nav">
-    <a href="#" onclick="showView('home'); return false;">Home</a>
-    <a href="#" onclick="showView('about'); return false;">About</a>
+  <div class="field">
+    <label>Category</label>
+    <select id="f-cat">
+      <option>Markets</option>
+      <option>Finance</option>
+      <option>Business</option>
+      <option>Strategy</option>
+      <option>Economics</option>
+    </select>
   </div>
 
-  <!-- HOME -->
-  <div id="view-home" class="view active">
-    <div id="loading">posts to be updated</div>
-    <div id="posts-list"></div>
+  <div class="field">
+    <label>Read time (min)</label>
+    <input type="number" id="f-time" min="1" placeholder="5">
   </div>
 
-  <!-- WRITE -->
-  <div id="view-write" class="view">
-    <div id="write-form">
-      <h2>Write a New Post</h2>
-      <div id="toast">Post published.</div>
-
-      <div class="field">
-        <label>Title</label>
-        <input type="text" id="f-title" placeholder="Post title">
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>Category</label>
-          <select id="f-cat">
-            <option>Markets</option>
-            <option>Finance</option>
-            <option>Business</option>
-            <option>Strategy</option>
-            <option>Economics</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Read time (min)</label>
-          <input type="number" id="f-time" placeholder="5" min="1">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Excerpt (one line summary)</label>
-        <input type="text" id="f-excerpt" placeholder="Brief description...">
-      </div>
-
-      <div class="field">
-        <label>Content (separate paragraphs with a blank line)</label>
-        <textarea id="f-content" placeholder="Write your post here..."></textarea>
-      </div>
-
-      <div id="publish-bar">
-        <input type="submit" value="Publish" onclick="publishPost()">
-        <span id="word-count">0 words</span>
-      </div>
-    </div>
+  <div class="field">
+    <label>Excerpt</label>
+    <input type="text" id="f-excerpt">
   </div>
 
-  <!-- POST DETAIL -->
-  <div id="view-post" class="view">
-    <div id="post-detail">
-      <a href="#" id="back-link" onclick="showView('home'); return false;">&larr; Back to all posts</a>
-      <h1 id="d-title"></h1>
-      <div class="post-meta" id="d-meta"></div>
-      <hr>
-      <div class="body" id="d-body"></div>
-    </div>
+  <div class="field">
+    <label>Content (separate paragraphs with blank line)</label>
+    <textarea id="f-content"></textarea>
   </div>
 
-  <!-- ABOUT -->
-  <div id="view-about" class="view">
-    <div id="about">
-      <h2>About</h2>
-    </div>
+  <div id="publish-bar">
+    <input type="submit" value="Publish" onclick="publishPost()">
+    <span id="word-count">0 words</span>
   </div>
+</div>
 
-  <div id="footer">
-    axis180 &mdash; &copy; 2026
+<!-- POST -->
+<div id="view-post" class="view">
+  <a href="#" onclick="showView('home');return false;">← Back</a>
+  <div id="post-detail">
+    <h1 id="d-title"></h1>
+    <div class="post-meta" id="d-meta"></div>
+    <hr>
+    <div class="body" id="d-body"></div>
   </div>
+</div>
+
+<!-- ABOUT -->
+<div id="view-about" class="view">
+  <h2>About</h2>
+  <p>axis180 is a minimal writing space focused on clarity in business, finance, and strategy.</p>
+</div>
+
+<div id="footer">
+  axis180 — © 2026
+</div>
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  const DEFAULT_POSTS = [];
+<script>
+let posts = [];
 
-  let posts = [];
+function loadPosts() {
+  const saved = localStorage.getItem('axis180-posts');
+  posts = saved ? JSON.parse(saved) : [];
+  renderPosts();
+}
 
-  function loadPosts() {
-    try {
-      const saved = localStorage.getItem('axis180-posts');
-      posts = saved ? JSON.parse(saved) : DEFAULT_POSTS;
-    } catch (e) {
-      posts = DEFAULT_POSTS;
-    }
-    document.getElementById('loading').style.display = 'none';
-    renderPosts();
+function savePosts() {
+  localStorage.setItem('axis180-posts', JSON.stringify(posts));
+}
+
+function renderPosts() {
+  const list = document.getElementById('posts-list');
+
+  if (posts.length === 0) {
+    list.innerHTML = "<p style='color:#666;font-size:14px;'>No posts yet.</p>";
+    return;
   }
 
-  function savePosts() {
-    try {
-      localStorage.setItem('axis180-posts', JSON.stringify(posts));
-    } catch (e) {
-      console.warn('Could not save posts:', e);
-    }
+  list.innerHTML = posts.map((p,i)=>`
+    <div class="post-entry">
+      <h2>
+        <a href="#" onclick="openPost(${i});return false;">${escapeHTML(p.title)}</a>
+        <a href="#" class="delete-link" onclick="deletePost(${i});return false;">[delete]</a>
+      </h2>
+      <div class="post-meta">${p.date} — ${p.category} — ${p.readtime} min read</div>
+      <p class="post-excerpt">${escapeHTML(p.excerpt)}</p>
+    </div>
+  `).join('');
+}
+
+function publishPost() {
+  const title = document.getElementById('f-title').value.trim();
+  const content = document.getElementById('f-content').value.trim();
+  if (!title || !content) {
+    alert("Title and content required.");
+    return;
   }
 
-  function renderPosts() {
-    const list = document.getElementById('posts-list');
-    if (posts.length === 0) {
-      list.innerHTML = '<p style="font-size:14px;color:#666;">No posts yet. <a href="#" onclick="showView(\'write\'); return false;">Write the first one.</a></p>';
-      return;
-    }
-    list.innerHTML = posts.map((p, i) => `
-      <div class="post-entry">
-        <h2>
-          <a href="#" onclick="openPost(${i}); return false;">${p.title}</a>
-          <a href="#" class="delete-link" onclick="deletePost(${i}); return false;">[delete]</a>
-        </h2>
-        <div class="post-meta">${p.date} &mdash; ${p.category} &mdash; ${p.readtime} min read</div>
-        <p class="post-excerpt">${p.excerpt}</p>
-        <div class="read-more"><a href="#" onclick="openPost(${i}); return false;">Read more &raquo;</a></div>
-      </div>
-    `).join('');
-  }
+  const newPost = {
+    title,
+    category: document.getElementById('f-cat').value,
+    readtime: parseInt(document.getElementById('f-time').value) || 5,
+    excerpt: document.getElementById('f-excerpt').value.trim() || content.slice(0,100)+"...",
+    content,
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+  };
 
-  function openPost(i) {
-    const p = posts[i];
-    document.getElementById('d-title').textContent = p.title;
-    document.getElementById('d-meta').textContent = p.date + ' \u2014 ' + p.category + ' \u2014 ' + p.readtime + ' min read';
-    document.getElementById('d-body').innerHTML = p.content
-      .split('\n\n').map(t => `<p>${t}</p>`).join('');
-    showView('post');
-    window.scrollTo(0, 0);
-  }
+  posts.unshift(newPost);
+  savePosts();
+  renderPosts();
 
-  function deletePost(i) {
-    if (!confirm('Delete "' + posts[i].title + '"?')) return;
-    posts.splice(i, 1);
+  document.querySelectorAll('#view-write input, #view-write textarea')
+    .forEach(el => el.value="");
+
+  document.getElementById('word-count').textContent = "0 words";
+
+  const toast = document.getElementById('toast');
+  toast.style.display="block";
+  setTimeout(()=>toast.style.display="none",2000);
+
+  showView('home');
+}
+
+function openPost(i){
+  const p = posts[i];
+  document.getElementById('d-title').textContent = p.title;
+  document.getElementById('d-meta').textContent =
+    p.date + " — " + p.category + " — " + p.readtime + " min read";
+
+  document.getElementById('d-body').innerHTML =
+    p.content.split('\n\n')
+      .map(t=>"<p>"+escapeHTML(t)+"</p>")
+      .join('');
+
+  showView('post');
+}
+
+function deletePost(i){
+  if(confirm("Delete this post?")){
+    posts.splice(i,1);
     savePosts();
     renderPosts();
-    showView('home');
   }
+}
 
-  function showView(name) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('view-' + name).classList.add('active');
-    window.scrollTo(0, 0);
-  }
+function showView(name){
+  document.querySelectorAll('.view')
+    .forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name)
+    .classList.add('active');
+  window.scrollTo(0,0);
+}
 
-  document.getElementById('f-content').addEventListener('input', function() {
-    const n = this.value.trim().split(/\s+/).filter(w => w).length;
-    document.getElementById('word-count').textContent = n + ' word' + (n !== 1 ? 's' : '');
-  });
+function escapeHTML(str){
+  return str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 
-  function publishPost() {
-    const title = document.getElementById('f-title').value.trim();
-    const content = document.getElementById('f-content').value.trim();
-    if (!title || !content) { alert('Title and content are required.'); return; }
+document.getElementById('f-content').addEventListener('input',function(){
+  const count = this.value.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('word-count').textContent =
+    count + " word" + (count!==1?"s":"");
+});
 
-    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const newPost = {
-      id: 'post-' + Date.now(),
-      title,
-      category: document.getElementById('f-cat').value,
-      date: today,
-      readtime: parseInt(document.getElementById('f-time').value) || 5,
-      excerpt: document.getElementById('f-excerpt').value.trim() || content.slice(0, 100) + '...',
-      content
-    };
+window.onload = loadPosts;
+</script>
 
-    posts.unshift(newPost);
-    savePosts();
-    renderPosts();
-
-    ['f-title','f-excerpt','f-content','f-time'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('word-count').tex
+</body>
+</html>
