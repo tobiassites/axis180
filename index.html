@@ -69,65 +69,6 @@ a:hover { text-decoration: underline; }
   margin-left: 10px;
 }
 
-.field { margin-bottom: 12px; }
-.field label {
-  display: block;
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 3px;
-}
-
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-  width: 100%;
-  font-family: inherit;
-  font-size: 15px;
-  border: 1px solid #999;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-textarea {
-  min-height: 260px;
-  line-height: 1.5;
-  resize: vertical;
-}
-
-input[type="submit"] {
-  font-family: inherit;
-  font-size: 14px;
-  border: 1px solid #000;
-  background: #fff;
-  padding: 5px 14px;
-  cursor: pointer;
-}
-
-input[type="submit"]:hover {
-  background: #000;
-  color: #fff;
-}
-
-#publish-bar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 8px;
-}
-
-#word-count {
-  font-size: 12px;
-  color: #666;
-}
-
-#toast {
-  display: none;
-  font-size: 13px;
-  color: #006600;
-  margin-bottom: 8px;
-}
-
 #post-detail h1 {
   margin: 0 0 6px 0;
   font-size: 20px;
@@ -158,54 +99,12 @@ input[type="submit"]:hover {
 
 <div id="nav">
   <a href="#" onclick="showView('home');return false;">Home</a>
-  <a href="#" onclick="showView('write');return false;">Write</a>
   <a href="#" onclick="showView('about');return false;">About</a>
 </div>
 
 <!-- HOME -->
 <div id="view-home" class="view active">
   <div id="posts-list"></div>
-</div>
-
-<!-- WRITE -->
-<div id="view-write" class="view">
-  <div id="toast">Post published.</div>
-
-  <div class="field">
-    <label>Title</label>
-    <input type="text" id="f-title">
-  </div>
-
-  <div class="field">
-    <label>Category</label>
-    <select id="f-cat">
-      <option>Markets</option>
-      <option>Finance</option>
-      <option>Business</option>
-      <option>Strategy</option>
-      <option>Economics</option>
-    </select>
-  </div>
-
-  <div class="field">
-    <label>Read time (min)</label>
-    <input type="number" id="f-time" min="1" placeholder="5">
-  </div>
-
-  <div class="field">
-    <label>Excerpt</label>
-    <input type="text" id="f-excerpt">
-  </div>
-
-  <div class="field">
-    <label>Content (separate paragraphs with blank line)</label>
-    <textarea id="f-content"></textarea>
-  </div>
-
-  <div id="publish-bar">
-    <input type="submit" value="Publish" onclick="publishPost()">
-    <span id="word-count">0 words</span>
-  </div>
 </div>
 
 <!-- POST -->
@@ -240,10 +139,6 @@ function loadPosts() {
   renderPosts();
 }
 
-function savePosts() {
-  localStorage.setItem('axis180-posts', JSON.stringify(posts));
-}
-
 function renderPosts() {
   const list = document.getElementById('posts-list');
 
@@ -264,41 +159,9 @@ function renderPosts() {
   `).join('');
 }
 
-function publishPost() {
-  const title = document.getElementById('f-title').value.trim();
-  const content = document.getElementById('f-content').value.trim();
-  if (!title || !content) {
-    alert("Title and content required.");
-    return;
-  }
-
-  const newPost = {
-    title,
-    category: document.getElementById('f-cat').value,
-    readtime: parseInt(document.getElementById('f-time').value) || 5,
-    excerpt: document.getElementById('f-excerpt').value.trim() || content.slice(0,100)+"...",
-    content,
-    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
-  };
-
-  posts.unshift(newPost);
-  savePosts();
-  renderPosts();
-
-  document.querySelectorAll('#view-write input, #view-write textarea')
-    .forEach(el => el.value="");
-
-  document.getElementById('word-count').textContent = "0 words";
-
-  const toast = document.getElementById('toast');
-  toast.style.display="block";
-  setTimeout(()=>toast.style.display="none",2000);
-
-  showView('home');
-}
-
 function openPost(i){
   const p = posts[i];
+
   document.getElementById('d-title').textContent = p.title;
   document.getElementById('d-meta').textContent =
     p.date + " — " + p.category + " — " + p.readtime + " min read";
@@ -314,7 +177,7 @@ function openPost(i){
 function deletePost(i){
   if(confirm("Delete this post?")){
     posts.splice(i,1);
-    savePosts();
+    localStorage.setItem('axis180-posts', JSON.stringify(posts));
     renderPosts();
   }
 }
@@ -330,12 +193,6 @@ function showView(name){
 function escapeHTML(str){
   return str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
-
-document.getElementById('f-content').addEventListener('input',function(){
-  const count = this.value.trim().split(/\s+/).filter(Boolean).length;
-  document.getElementById('word-count').textContent =
-    count + " word" + (count!==1?"s":"");
-});
 
 window.onload = loadPosts;
 </script>
