@@ -74,7 +74,7 @@ a:hover { text-decoration: underline; }
   font-size: 20px;
 }
 
-#post-detail .body p {
+.body p {
   margin: 0 0 14px 0;
   line-height: 1.6;
 }
@@ -94,14 +94,12 @@ a:hover { text-decoration: underline; }
 
 <div id="header">
   <h1>axis180</h1>
-  <p></p>
-  <p></p>
-  <p></p>
   <p>just a personal site for my thoughts. thought it would be a fun project.</p>
 </div>
 
 <div id="nav">
   <a href="#" onclick="showView('home');return false;">Home</a>
+  <a href="#" onclick="showView('stocks');return false;">Stock Research</a>
   <a href="#" onclick="showView('about');return false;">About</a>
 </div>
 
@@ -121,13 +119,41 @@ a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<!-- stock research -->
-<div id="view-stock research" class="view active">
+<!-- STOCK RESEARCH -->
+<div id="view-stocks" class="view">
+  <h2>Stock Research</h2>
+
+  <div class="post-entry">
+    <h2><a href="#" onclick="openStock('a');return false;">Stock A</a></h2>
+    <p class="post-excerpt">Research notes for Stock A.</p>
+  </div>
+
+  <div class="post-entry">
+    <h2><a href="#" onclick="openStock('b');return false;">Stock B</a></h2>
+    <p class="post-excerpt">Research notes for Stock B.</p>
+  </div>
+
+  <div class="post-entry">
+    <h2><a href="#" onclick="openStock('c');return false;">Stock C</a></h2>
+    <p class="post-excerpt">Research notes for Stock C.</p>
+  </div>
 </div>
-  
+
+<!-- STOCK DETAIL -->
+<div id="view-stock-detail" class="view">
+  <a href="#" onclick="showView('stocks');return false;">← Back</a>
+  <div id="stock-detail">
+    <h1 id="s-title"></h1>
+    <hr>
+    <div class="body" id="s-body" contenteditable="true">
+      <p>Write your research here...</p>
+    </div>
+  </div>
+</div>
+
 <!-- ABOUT -->
 <div id="view-about" class="view">
-  <p>non of the information you will read is financial advice, nor advice of any kind</p>
+  <p>none of the information you will read is financial advice, nor advice of any kind</p>
   <p>read at your own pleasure, would love the discussion in the comments of each post</p>
 </div>
 
@@ -200,6 +226,28 @@ function showView(name){
 function escapeHTML(str){
   return str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
+
+/* ===== STOCK RESEARCH ===== */
+
+function openStock(letter){
+  document.getElementById('s-title').textContent =
+    "Stock " + letter.toUpperCase();
+
+  const saved = localStorage.getItem('axis180-stock-'+letter);
+  document.getElementById('s-body').innerHTML =
+    saved || "<p>Write your research here...</p>";
+
+  showView('stock-detail');
+}
+
+// autosave stock notes
+document.addEventListener("input", function(e){
+  if(e.target.id === "s-body"){
+    const title = document.getElementById('s-title').textContent;
+    const letter = title.split(" ")[1].toLowerCase();
+    localStorage.setItem('axis180-stock-'+letter, e.target.innerHTML);
+  }
+});
 
 window.onload = loadPosts;
 </script>
