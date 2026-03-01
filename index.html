@@ -108,9 +108,9 @@ a:hover { text-decoration: underline; }
 </div>
 
 <div id="nav">
-  <a href="#" onclick="showView('home');return false;">Home</a>
-  <a href="#" onclick="showView('stocks');return false;">Stock Research</a>
-  <a href="#" onclick="showView('about');return false;">About</a>
+  <a href="#" onclick="showView('home');return false;">home</a>
+  <a href="#" onclick="showView('stocks');return false;">stock research</a>
+  <a href="#" onclick="showView('about');return false;">about</a>
 </div>
 
 <!-- HOME -->
@@ -141,17 +141,8 @@ a:hover { text-decoration: underline; }
   <h2>stock research</h2>
 
   <div class="post-entry">
-    <h2><a href="#" onclick="openStock('a');return false;">Stock A</a></h2>
+    <h2><a href="#" onclick="openStock('a');return false;">...</a></h2>
   </div>
-
-  <div class="post-entry">
-    <h2><a href="#" onclick="openStock('b');return false;">Stock B</a></h2>
-  </div>
-
-  <div class="post-entry">
-    <h2><a href="#" onclick="openStock('c');return false;">Stock C</a></h2>
-  </div>
-</div>
 
 <!-- STOCK DETAIL -->
 <div id="view-stock-detail" class="view">
@@ -233,9 +224,9 @@ function openPost(i){
 /* ===== STOCKS (write in code only) ===== */
 
 const stockContent = {
-  a: "<p>Your Stock A research goes here.</p>",
-  b: "<p>Your Stock B research goes here.</p>",
-  c: "<p>Your Stock C research goes here.</p>"
+  a: "<p></p>",
+  b: "<p></p>",
+  c: "<p></p>"
 };
 
 function openStock(letter){
