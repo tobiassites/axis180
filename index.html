@@ -20,8 +20,14 @@ body {
   padding: 20px 12px;
 }
 
-a { color: #0000cc; text-decoration: none; }
-a:hover { text-decoration: underline; }
+a {
+  color: #0000cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 
 #header {
   border-bottom: 1px solid #000;
@@ -29,8 +35,16 @@ a:hover { text-decoration: underline; }
   margin-bottom: 16px;
 }
 
-#header h1 { margin: 0; font-size: 22px; }
-#header p { margin: 2px 0 0 0; font-size: 13px; color: #555; }
+#header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+#header p {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: #555;
+}
 
 #nav {
   font-size: 13px;
@@ -39,10 +53,17 @@ a:hover { text-decoration: underline; }
   padding-bottom: 6px;
 }
 
-#nav a { margin-right: 14px; }
+#nav a {
+  margin-right: 14px;
+}
 
-.view { display: none; }
-.view.active { display: block; }
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
 
 .post-entry {
   margin-bottom: 24px;
@@ -50,7 +71,10 @@ a:hover { text-decoration: underline; }
   border-bottom: 1px solid #eee;
 }
 
-.post-entry h2 { margin: 0 0 4px 0; font-size: 17px; }
+.post-entry h2 {
+  margin: 0 0 4px 0;
+  font-size: 17px;
+}
 
 .post-meta {
   font-size: 12px;
@@ -66,6 +90,14 @@ a:hover { text-decoration: underline; }
 .body p {
   margin: 0 0 14px 0;
   line-height: 1.6;
+}
+
+/* stock note */
+
+.stock-note {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 /* comments */
@@ -121,49 +153,89 @@ a:hover { text-decoration: underline; }
 <!-- POST -->
 <div id="view-post" class="view">
   <a href="#" onclick="showView('home');return false;">← Back</a>
+
   <div id="post-detail">
     <h1 id="d-title"></h1>
+
     <div class="post-meta" id="d-meta"></div>
+
     <hr>
+
     <div class="body" id="d-body"></div>
 
     <div class="comment-box">
       <h3>comments</h3>
+
       <div id="comments-post"></div>
-      <textarea id="comment-input-post" placeholder="write a comment..."></textarea><br>
-      <button onclick="addComment('post')">post comment</button>
+
+      <textarea
+        id="comment-input-post"
+        placeholder="write a comment..."
+      ></textarea><br>
+
+      <button onclick="addComment('post')">
+        post comment
+      </button>
     </div>
   </div>
 </div>
 
 <!-- STOCK RESEARCH -->
 <div id="view-stocks" class="view">
+
   <h2>stock research</h2>
 
   <div class="post-entry">
-    <h2><a href="#" onclick="openStock('a');return false;">buy 2 visa avg cost $320.32 </a></h2>
+
+    <div class="stock-note">
+      buy 2 visa avg cost $320.32
+    </div>
+
   </div>
+
+</div>
 
 <!-- STOCK DETAIL -->
 <div id="view-stock-detail" class="view">
-  <a href="#" onclick="showView('stocks');return false;">← Back</a>
+
+  <a href="#" onclick="showView('stocks');return false;">
+    ← Back
+  </a>
+
   <div id="stock-detail">
+
     <h1 id="s-title"></h1>
+
     <hr>
+
     <div class="body" id="s-body"></div>
 
     <div class="comment-box">
+
       <h3>comments</h3>
+
       <div id="comments-stock"></div>
-      <textarea id="comment-input-stock" placeholder="write a comment..."></textarea><br>
-      <button onclick="addComment('stock')">post comment</button>
+
+      <textarea
+        id="comment-input-stock"
+        placeholder="write a comment..."
+      ></textarea><br>
+
+      <button onclick="addComment('stock')">
+        post comment
+      </button>
+
     </div>
   </div>
 </div>
 
 <!-- ABOUT -->
 <div id="view-about" class="view">
-  <p>none of the information you will read is financial advice, nor advice of any kind</p>
+  <p>
+    none of the information you will read is financial advice,
+    nor advice of any kind
+  </p>
+
   <p>read at your own pleasure</p>
 </div>
 
@@ -174,32 +246,53 @@ a:hover { text-decoration: underline; }
 </div>
 
 <script>
+
 let posts = [];
 
 /* ===== POSTS ===== */
 
 function loadPosts() {
+
   const saved = localStorage.getItem('axis180-posts');
+
   posts = saved ? JSON.parse(saved) : [];
+
   renderPosts();
 }
 
 function renderPosts() {
+
   const list = document.getElementById('posts-list');
 
   if (posts.length === 0) {
-    list.innerHTML = "<p style='color:#666;font-size:14px;'>No posts yet.</p>";
+
+    list.innerHTML =
+      "<p style='color:#666;font-size:14px;'>No posts yet.</p>";
+
     return;
   }
 
   list.innerHTML = posts.map((p,i)=>`
+
     <div class="post-entry">
+
       <h2>
-        <a href="#" onclick="openPost(${i});return false;">${escapeHTML(p.title)}</a>
+        <a href="#"
+           onclick="openPost(${i});return false;">
+           ${escapeHTML(p.title)}
+        </a>
       </h2>
-      <div class="post-meta">${p.date} — ${p.category} — ${p.readtime} min read</div>
-      <p class="post-excerpt">${escapeHTML(p.excerpt)}</p>
+
+      <div class="post-meta">
+        ${p.date} — ${p.category} — ${p.readtime} min read
+      </div>
+
+      <p class="post-excerpt">
+        ${escapeHTML(p.excerpt)}
+      </p>
+
     </div>
+
   `).join('');
 }
 
@@ -207,29 +300,42 @@ let currentPostId = null;
 let currentStockId = null;
 
 function openPost(i){
+
   const p = posts[i];
+
   currentPostId = i;
 
-  document.getElementById('d-title').textContent = p.title;
+  document.getElementById('d-title').textContent =
+    p.title;
+
   document.getElementById('d-meta').textContent =
-    p.date + " — " + p.category + " — " + p.readtime + " min read";
+    p.date + " — " +
+    p.category + " — " +
+    p.readtime + " min read";
 
   document.getElementById('d-body').innerHTML =
-    p.content.split('\n\n').map(t=>"<p>"+escapeHTML(t)+"</p>").join('');
+    p.content
+      .split('\n\n')
+      .map(t => "<p>" + escapeHTML(t) + "</p>")
+      .join('');
 
   loadComments('post');
+
   showView('post');
 }
 
-/* ===== STOCKS (write in code only) ===== */
+/* ===== STOCKS ===== */
 
 const stockContent = {
+
   a: "<p></p>",
   b: "<p></p>",
   c: "<p></p>"
+
 };
 
 function openStock(letter){
+
   currentStockId = letter;
 
   document.getElementById('s-title').textContent =
@@ -239,59 +345,91 @@ function openStock(letter){
     stockContent[letter];
 
   loadComments('stock');
+
   showView('stock-detail');
 }
 
 /* ===== COMMENTS ===== */
 
 function getCommentKey(type){
-  if(type === 'post') return 'axis180-comments-post-' + currentPostId;
-  if(type === 'stock') return 'axis180-comments-stock-' + currentStockId;
+
+  if(type === 'post')
+    return 'axis180-comments-post-' + currentPostId;
+
+  if(type === 'stock')
+    return 'axis180-comments-stock-' + currentStockId;
 }
 
 function loadComments(type){
+
   const key = getCommentKey(type);
-  const data = JSON.parse(localStorage.getItem(key) || "[]");
+
+  const data =
+    JSON.parse(localStorage.getItem(key) || "[]");
 
   const box = document.getElementById(
-    type === 'post' ? 'comments-post' : 'comments-stock'
+
+    type === 'post'
+      ? 'comments-post'
+      : 'comments-stock'
   );
 
-  box.innerHTML = data.map(c => `<div class="comment">${escapeHTML(c)}</div>`).join('');
+  box.innerHTML =
+    data.map(c =>
+      `<div class="comment">${escapeHTML(c)}</div>`
+    ).join('');
 }
 
 function addComment(type){
+
   const input = document.getElementById(
-    type === 'post' ? 'comment-input-post' : 'comment-input-stock'
+
+    type === 'post'
+      ? 'comment-input-post'
+      : 'comment-input-stock'
   );
 
   if(!input.value.trim()) return;
 
   const key = getCommentKey(type);
-  const data = JSON.parse(localStorage.getItem(key) || "[]");
+
+  const data =
+    JSON.parse(localStorage.getItem(key) || "[]");
 
   data.push(input.value.trim());
-  localStorage.setItem(key, JSON.stringify(data));
+
+  localStorage.setItem(
+    key,
+    JSON.stringify(data)
+  );
 
   input.value = "";
+
   loadComments(type);
 }
 
 /* ===== UTIL ===== */
 
 function showView(name){
+
   document.querySelectorAll('.view')
-    .forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+name)
+    .forEach(v => v.classList.remove('active'));
+
+  document.getElementById('view-' + name)
     .classList.add('active');
+
   window.scrollTo(0,0);
 }
 
 function escapeHTML(str){
-  return str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+  return str
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 }
 
 window.onload = loadPosts;
+
 </script>
 
 </body>
